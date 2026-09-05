@@ -17,16 +17,9 @@
       <img src="https://akiretechbr.github.io/loja/assets/logo.webp" alt="Logo Akire">
       <span>LOJINHA</span>
     </a>
-    <a class="contact" href="https://wa.me/5541998474731" target="_blank" rel="noopener">Falar no WhatsApp</a>
   </header>
 
   <main id="inicio">
-    <section class="intro">
-      <p class="eyebrow">PRODUTOS AKIRE</p>
-      <h1>Escolha seu produto.<br><span>O frete, você decide.</span></h1>
-      <p class="lead">Selecione uma opção de entrega para ver o valor final na hora.</p>
-    </section>
-
     <section class="freight-panel" aria-labelledby="freight-title">
       <div>
         <p class="kicker">ENTREGA LOCAL</p>
@@ -45,8 +38,13 @@
           <p class="kicker">CATÁLOGO</p>
           <h2 id="catalog-title">Produtos disponíveis</h2>
         </div>
-        <p id="product-count" aria-live="polite"></p>
+        <label class="search-box">
+          <span class="sr-only">Procurar produto</span>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"/></svg>
+          <input id="product-search" type="search" placeholder="Procurar produto" autocomplete="off">
+        </label>
       </div>
+      <p id="product-count" class="product-count" aria-live="polite"></p>
       <div id="products" class="product-grid" aria-live="polite"></div>
       <p id="error" class="error" hidden>Não foi possível carregar os produtos. Tente novamente mais tarde.</p>
     </section>
