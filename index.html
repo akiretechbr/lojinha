@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#070a19">
+  <meta name="description" content="Catálogo de produtos Akire com cálculo de frete local.">
+  <title>Akire | Lojinha</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#inicio" aria-label="Akire — início">
+      <img src="https://akiretechbr.github.io/loja/assets/logo.webp" alt="Logo Akire">
+      <span>LOJINHA</span>
+    </a>
+    <a class="contact" href="https://wa.me/5541998474731" target="_blank" rel="noopener">Falar no WhatsApp</a>
+  </header>
+
+  <main id="inicio">
+    <section class="intro">
+      <p class="eyebrow">PRODUTOS AKIRE</p>
+      <h1>Escolha seu produto.<br><span>O frete, você decide.</span></h1>
+      <p class="lead">Selecione uma opção de entrega para ver o valor final na hora.</p>
+    </section>
+
+    <section class="freight-panel" aria-labelledby="freight-title">
+      <div>
+        <p class="kicker">ENTREGA LOCAL</p>
+        <h2 id="freight-title">Adicionar frete?</h2>
+      </div>
+      <div class="freight-options" role="radiogroup" aria-label="Valor do frete">
+        <label><input type="radio" name="freight" value="0" checked><span>Não</span></label>
+        <label><input type="radio" name="freight" value="8.9"><span>Sim · R$ 8,90</span></label>
+        <label><input type="radio" name="freight" value="13.9"><span>Sim · R$ 13,90</span></label>
+      </div>
+    </section>
+
+    <section class="catalog" aria-labelledby="catalog-title">
+      <div class="section-heading">
+        <div>
+          <p class="kicker">CATÁLOGO</p>
+          <h2 id="catalog-title">Produtos disponíveis</h2>
+        </div>
+        <p id="product-count" aria-live="polite"></p>
+      </div>
+      <div id="products" class="product-grid" aria-live="polite"></div>
+      <p id="error" class="error" hidden>Não foi possível carregar os produtos. Tente novamente mais tarde.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>AKIRE · Atendimento via WhatsApp</p>
+  </footer>
+  <script src="app.js" defer></script>
+</body>
+</html>
+
