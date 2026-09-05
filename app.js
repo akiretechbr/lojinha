@@ -19,7 +19,6 @@ function render() {
     : `${visibleProducts.length} ${visibleProducts.length === 1 ? 'produto' : 'produtos'}`;
   productsNode.innerHTML = visibleProducts.map((item, index) => {
     const total = item.localSale + freight;
-    const message = encodeURIComponent(`Olá! Tenho interesse em ${item.product}. Valor do produto: ${money.format(item.localSale)}. Frete: ${freight ? money.format(freight) : 'sem frete'}. Total: ${money.format(total)}.`);
     return `<article class="product-card">
       <span class="product-index">${String(index + 1).padStart(2, '0')}</span>
       <h3>${escapeHtml(item.product)}</h3>
@@ -27,7 +26,6 @@ function render() {
         <div><span class="price-label">Produto</span><span class="base-price">${money.format(item.localSale)}</span></div>
         <div><span class="price-label">Total${freight ? ' com frete' : ''}</span><span class="total-price">${money.format(total)}</span></div>
       </div>
-      <a class="buy-button" href="https://wa.me/5541998474731?text=${message}" target="_blank" rel="noopener">Pedir pelo WhatsApp</a>
     </article>`;
   }).join('') || '<p class="error">Nenhum produto encontrado. Tente outro nome.</p>';
 }
