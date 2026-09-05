@@ -1,6 +1,7 @@
 const productsNode = document.querySelector('#products');
 const countNode = document.querySelector('#product-count');
 const errorNode = document.querySelector('#error');
+const searchNode = document.querySelector('#product-search');
 const freightInputs = [...document.querySelectorAll('input[name="freight"]')];
 const money = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
 let products = [];
@@ -11,8 +12,12 @@ function selectedFreight() {
 
 function render() {
   const freight = selectedFreight();
-  countNode.textContent = `${products.length} ${products.length === 1 ? 'produto' : 'produtos'}`;
-  productsNode.innerHTML = products.map((item, index) => {
+  const query = searchNode.value.trim().toLocaleLowerCase('pt-BR');
+  const visibleProducts = products.filter(item => item.product.toLocaleLowerCase('pt-BR').includes(query));
+  countNode.textContent = query
+    ? `${visibleProducts.length} ${visibleProducts.length === 1 ? 'produto encontrado' : 'produtos encontrados'}`
+    : `${visibleProducts.length} ${visibleProducts.length === 1 ? 'produto' : 'produtos'}`;
+  productsNode.innerHTML = visibleProducts.map((item, index) => {
     const total = item.localSale + freight;
     const message = encodeURIComponent(`Olá! Tenho interesse em ${item.product}. Valor do produto: ${money.format(item.localSale)}. Frete: ${freight ? money.format(freight) : 'sem frete'}. Total: ${money.format(total)}.`);
     return `<article class="product-card">
@@ -24,7 +29,7 @@ function render() {
       </div>
       <a class="buy-button" href="https://wa.me/5541998474731?text=${message}" target="_blank" rel="noopener">Pedir pelo WhatsApp</a>
     </article>`;
-  }).join('');
+  }).join('') || '<p class="error">Nenhum produto encontrado. Tente outro nome.</p>';
 }
 
 function escapeHtml(value) {
@@ -34,6 +39,7 @@ function escapeHtml(value) {
 }
 
 freightInputs.forEach(input => input.addEventListener('change', render));
+searchNode.addEventListener('input', render);
 
 fetch('data/produtos.json', { cache: 'no-store' })
   .then(response => { if (!response.ok) throw new Error('Falha ao carregar'); return response.json(); })
