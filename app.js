@@ -18,6 +18,10 @@ const checkoutTotalNode = document.querySelector('#checkout-total');
 const checkoutSavingsNode = document.querySelector('#checkout-savings');
 const whatsappOrderNode = document.querySelector('#whatsapp-order');
 const freightInputs = [...document.querySelectorAll('input[name="freight"]')];
+const photoDialog = document.querySelector('#photo-dialog');
+const photoImageNode = document.querySelector('#photo-image');
+const photoTitleNode = document.querySelector('#photo-title');
+const closePhotoNode = document.querySelector('#close-photo');
 const money = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
 let products = [];
 const cart = new Map();
@@ -43,7 +47,10 @@ function renderProducts() {
     <h3>${escapeHtml(item.product)}</h3>
     <div class="price-row">
       <div><span class="price-label">Valor unitário</span><span class="base-price">${money.format(item.localSale)}</span></div>
-      <button class="add-cart" type="button" data-product="${escapeHtml(item.product)}">Adicionar</button>
+      <div class="product-actions">
+        ${item.image ? `<button class="photo-button" type="button" data-photo-product="${escapeHtml(item.product)}">Foto</button>` : ''}
+        <button class="add-cart" type="button" data-product="${escapeHtml(item.product)}">Adicionar</button>
+      </div>
     </div>
   </article>`).join('') || '<p class="error">Nenhum produto encontrado. Tente outro nome.</p>';
 }
@@ -108,6 +115,16 @@ function changeQuantity(productName, amount) {
 }
 
 productsNode.addEventListener('click', event => {
+  const photoButton = event.target.closest('[data-photo-product]');
+  if (photoButton) {
+    const selected = products.find(item => item.product === photoButton.dataset.photoProduct);
+    if (!selected?.image) return;
+    photoImageNode.src = selected.image;
+    photoImageNode.alt = selected.product;
+    photoTitleNode.textContent = selected.product;
+    photoDialog.showModal();
+    return;
+  }
   const button = event.target.closest('.add-cart');
   if (!button) return;
   const product = products.find(item => item.product === button.dataset.product);
@@ -130,6 +147,8 @@ clearCartNode.addEventListener('click', () => { cart.clear(); renderCart(); });
 checkoutCartNode.addEventListener('click', openCheckout);
 closeCheckoutNode.addEventListener('click', () => checkoutDialog.close());
 checkoutDialog.addEventListener('click', event => { if (event.target === checkoutDialog) checkoutDialog.close(); });
+closePhotoNode.addEventListener('click', () => photoDialog.close());
+photoDialog.addEventListener('click', event => { if (event.target === photoDialog) photoDialog.close(); });
 freightInputs.forEach(input => input.addEventListener('change', renderCart));
 searchNode.addEventListener('input', renderProducts);
 
