@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=8">
+  <link rel="stylesheet" href="style.css?v=9">
 </head>
 <body>
   <header class="topbar">
@@ -83,13 +83,18 @@
       <h2 id="photo-title">Foto do produto</h2>
       <button id="close-photo" class="close-photo" type="button" aria-label="Fechar foto">×</button>
     </div>
-    <div class="photo-stage"><img id="photo-image" src="" alt=""></div>
+    <div id="photo-stage" class="photo-stage">
+      <img id="photo-image" src="" alt="">
+      <button id="photo-prev" class="photo-arrow photo-prev" type="button" aria-label="Foto anterior">‹</button>
+      <button id="photo-next" class="photo-arrow photo-next" type="button" aria-label="Próxima foto">›</button>
+    </div>
+    <div id="photo-dots" class="photo-dots" aria-label="Posição na galeria"></div>
   </dialog>
 
   <footer>
     <p>AKIRE · Atendimento via WhatsApp</p>
   </footer>
-  <script src="app.js?v=8" defer></script>
+  <script src="app.js?v=9" defer></script>
 </body>
 </html>
 
