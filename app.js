@@ -8,6 +8,14 @@ const subtotalNode = document.querySelector('#cart-subtotal');
 const cartFreightNode = document.querySelector('#cart-freight');
 const totalNode = document.querySelector('#cart-total');
 const clearCartNode = document.querySelector('#clear-cart');
+const checkoutCartNode = document.querySelector('#checkout-cart');
+const checkoutDialog = document.querySelector('#checkout-dialog');
+const closeCheckoutNode = document.querySelector('#close-checkout');
+const checkoutItemsNode = document.querySelector('#checkout-items');
+const checkoutSubtotalNode = document.querySelector('#checkout-subtotal');
+const checkoutFreightNode = document.querySelector('#checkout-freight');
+const checkoutTotalNode = document.querySelector('#checkout-total');
+const whatsappOrderNode = document.querySelector('#whatsapp-order');
 const freightInputs = [...document.querySelectorAll('input[name="freight"]')];
 const money = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
 let products = [];
@@ -49,6 +57,7 @@ function renderCart() {
   cartFreightNode.textContent = money.format(freight);
   totalNode.textContent = money.format(subtotal + freight);
   clearCartNode.disabled = !items.length;
+  checkoutCartNode.disabled = !items.length;
   cartItemsNode.innerHTML = items.length ? items.map(item => `<div class="cart-item">
     <p class="cart-item-name">${escapeHtml(item.product)}</p>
     <div class="cart-item-bottom">
@@ -61,6 +70,25 @@ function renderCart() {
     </div>
     <button class="remove-item" type="button" data-action="remove" data-product="${escapeHtml(item.product)}">Remover</button>
   </div>`).join('') : '<p class="cart-empty">Procure um produto e adicione à sua lista.</p>';
+}
+
+function openCheckout() {
+  const items = [...cart.values()];
+  if (!items.length) return;
+  const subtotal = items.reduce((sum, item) => sum + item.localSale * item.quantity, 0);
+  const freight = selectedFreight();
+  const total = subtotal + freight;
+  checkoutItemsNode.innerHTML = items.map(item => `<div class="checkout-line">
+    <div><p class="checkout-line-name">${escapeHtml(item.product)}</p><span class="checkout-line-meta">${item.quantity} × ${money.format(item.localSale)}</span></div>
+    <strong class="checkout-line-value">${money.format(item.localSale * item.quantity)}</strong>
+  </div>`).join('');
+  checkoutSubtotalNode.textContent = money.format(subtotal);
+  checkoutFreightNode.textContent = money.format(freight);
+  checkoutTotalNode.textContent = money.format(total);
+  const lines = items.map(item => `• ${item.quantity}x ${item.product} — ${money.format(item.localSale * item.quantity)}`);
+  const message = ['Olá! Segue o resumo do pedido:', '', ...lines, '', `Subtotal: ${money.format(subtotal)}`, `Frete: ${money.format(freight)}`, `Total: ${money.format(total)}`].join('\n');
+  whatsappOrderNode.href = `https://wa.me/5541998474731?text=${encodeURIComponent(message)}`;
+  checkoutDialog.showModal();
 }
 
 function changeQuantity(productName, amount) {
@@ -90,6 +118,9 @@ cartItemsNode.addEventListener('click', event => {
 });
 
 clearCartNode.addEventListener('click', () => { cart.clear(); renderCart(); });
+checkoutCartNode.addEventListener('click', openCheckout);
+closeCheckoutNode.addEventListener('click', () => checkoutDialog.close());
+checkoutDialog.addEventListener('click', event => { if (event.target === checkoutDialog) checkoutDialog.close(); });
 freightInputs.forEach(input => input.addEventListener('change', renderCart));
 searchNode.addEventListener('input', renderProducts);
 
