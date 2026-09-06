@@ -152,8 +152,18 @@ photoDialog.addEventListener('click', event => { if (event.target === photoDialo
 freightInputs.forEach(input => input.addEventListener('change', renderCart));
 searchNode.addEventListener('input', renderProducts);
 
-fetch('data/produtos.json', { cache: 'no-store' })
-  .then(response => { if (!response.ok) throw new Error('Falha ao carregar'); return response.json(); })
-  .then(data => { products = data.products || []; renderProducts(); renderCart(); })
+Promise.all([
+  fetch('data/produtos.json', { cache: 'no-store' }).then(response => {
+    if (!response.ok) throw new Error('Falha ao carregar produtos');
+    return response.json();
+  }),
+  fetch('data/fotos.json', { cache: 'no-store' }).then(response => response.ok ? response.json() : { photos: [] })
+])
+  .then(([data, photoData]) => {
+    const photoByProduct = new Map((photoData.photos || []).map(item => [item.product.toLocaleLowerCase('pt-BR'), item.image]));
+    products = (data.products || []).map(item => ({ ...item, image: photoByProduct.get(item.product.toLocaleLowerCase('pt-BR')) || '' }));
+    renderProducts();
+    renderCart();
+  })
   .catch(() => { errorNode.hidden = false; countNode.textContent = ''; });
 
