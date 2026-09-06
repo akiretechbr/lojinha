@@ -22,6 +22,13 @@ const photoDialog = document.querySelector('#photo-dialog');
 const photoImageNode = document.querySelector('#photo-image');
 const photoTitleNode = document.querySelector('#photo-title');
 const closePhotoNode = document.querySelector('#close-photo');
+const photoStageNode = document.querySelector('#photo-stage');
+const photoPrevNode = document.querySelector('#photo-prev');
+const photoNextNode = document.querySelector('#photo-next');
+const photoDotsNode = document.querySelector('#photo-dots');
+let currentPhotoImages = [];
+let currentPhotoIndex = 0;
+let photoTouchStartX = 0;
 const money = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
 let products = [];
 const cart = new Map();
@@ -48,7 +55,7 @@ function renderProducts() {
     <div class="price-row">
       <div><span class="price-label">Valor unitário</span><span class="base-price">${money.format(item.localSale)}</span></div>
       <div class="product-actions">
-        ${item.image ? `<button class="photo-button" type="button" data-photo-product="${escapeHtml(item.product)}">Foto</button>` : ''}
+        ${item.images?.length ? `<button class="photo-button" type="button" data-photo-product="${escapeHtml(item.product)}">Foto${item.images.length > 1 ? ` (${item.images.length})` : ''}</button>` : ''}
         <button class="add-cart" type="button" data-product="${escapeHtml(item.product)}">Adicionar</button>
       </div>
     </div>
@@ -118,10 +125,12 @@ productsNode.addEventListener('click', event => {
   const photoButton = event.target.closest('[data-photo-product]');
   if (photoButton) {
     const selected = products.find(item => item.product === photoButton.dataset.photoProduct);
-    if (!selected?.image) return;
-    photoImageNode.src = selected.image;
+    if (!selected?.images?.length) return;
+    currentPhotoImages = selected.images;
+    currentPhotoIndex = 0;
     photoImageNode.alt = selected.product;
     photoTitleNode.textContent = selected.product;
+    renderPhoto();
     photoDialog.showModal();
     return;
   }
@@ -147,7 +156,34 @@ clearCartNode.addEventListener('click', () => { cart.clear(); renderCart(); });
 checkoutCartNode.addEventListener('click', openCheckout);
 closeCheckoutNode.addEventListener('click', () => checkoutDialog.close());
 checkoutDialog.addEventListener('click', event => { if (event.target === checkoutDialog) checkoutDialog.close(); });
+function renderPhoto() {
+  photoImageNode.src = currentPhotoImages[currentPhotoIndex] || '';
+  photoPrevNode.hidden = currentPhotoImages.length < 2;
+  photoNextNode.hidden = currentPhotoImages.length < 2;
+  photoDotsNode.hidden = currentPhotoImages.length < 2;
+  photoDotsNode.innerHTML = currentPhotoImages.map((_, index) =>
+    `<button type="button" data-photo-index="${index}" class="${index === currentPhotoIndex ? 'active' : ''}" aria-label="Abrir foto ${index + 1}"></button>`
+  ).join('');
+}
+function changePhoto(amount) {
+  if (currentPhotoImages.length < 2) return;
+  currentPhotoIndex = (currentPhotoIndex + amount + currentPhotoImages.length) % currentPhotoImages.length;
+  renderPhoto();
+}
 closePhotoNode.addEventListener('click', () => photoDialog.close());
+photoPrevNode.addEventListener('click', () => changePhoto(-1));
+photoNextNode.addEventListener('click', () => changePhoto(1));
+photoDotsNode.addEventListener('click', event => {
+  const dot = event.target.closest('[data-photo-index]');
+  if (!dot) return;
+  currentPhotoIndex = Number(dot.dataset.photoIndex);
+  renderPhoto();
+});
+photoStageNode.addEventListener('touchstart', event => { photoTouchStartX = event.changedTouches[0].clientX; }, { passive: true });
+photoStageNode.addEventListener('touchend', event => {
+  const distance = event.changedTouches[0].clientX - photoTouchStartX;
+  if (Math.abs(distance) > 45) changePhoto(distance < 0 ? 1 : -1);
+}, { passive: true });
 photoDialog.addEventListener('click', event => { if (event.target === photoDialog) photoDialog.close(); });
 freightInputs.forEach(input => input.addEventListener('change', renderCart));
 searchNode.addEventListener('input', renderProducts);
@@ -160,8 +196,11 @@ Promise.all([
   fetch('data/fotos.json', { cache: 'no-store' }).then(response => response.ok ? response.json() : { photos: [] })
 ])
   .then(([data, photoData]) => {
-    const photoByProduct = new Map((photoData.photos || []).map(item => [item.product.toLocaleLowerCase('pt-BR'), item.image]));
-    products = (data.products || []).map(item => ({ ...item, image: photoByProduct.get(item.product.toLocaleLowerCase('pt-BR')) || '' }));
+    const photoByProduct = new Map((photoData.photos || []).map(item => [
+      item.product.toLocaleLowerCase('pt-BR'),
+      item.images || (item.image ? [item.image] : [])
+    ]));
+    products = (data.products || []).map(item => ({ ...item, images: photoByProduct.get(item.product.toLocaleLowerCase('pt-BR')) || [] }));
     renderProducts();
     renderCart();
   })
