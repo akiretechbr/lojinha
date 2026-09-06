@@ -17,3 +17,10 @@ footer{padding:32px 20px 44px;text-align:center;color:var(--muted);font-size:.82
 @media(max-width:960px){.shop-layout{grid-template-columns:1fr}.cart{position:static;margin:0 0 52px}.catalog{padding-bottom:0}}
 @media(max-width:720px){.shop-layout .price-row{align-items:center}.cart{padding:20px}}
 
+/* Catálogo compacto e frete integrado ao carrinho */
+.shop-layout{grid-template-columns:minmax(0,1fr) 370px;margin-top:30px}.catalog{padding-top:18px}.product-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.shop-layout .product-card{min-height:145px;padding:15px;border-radius:16px}.shop-layout .product-index{width:29px;height:29px;border-radius:8px;font-size:.78rem}.shop-layout .product-card h3{margin:14px 0 18px;font-size:.96rem;line-height:1.25}.shop-layout .price-row{padding-top:13px;margin-top:auto;gap:8px}.shop-layout .price-label{font-size:.7rem}.shop-layout .base-price{font-size:.93rem}.shop-layout .add-cart{min-height:36px;padding:7px 10px;border-radius:9px;font-size:.82rem}.cart{margin-top:18px}.cart-freight{padding:17px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.cart-freight h3{margin:0 0 13px;font-family:Manrope,sans-serif;font-size:1rem}.cart-freight .kicker{margin-bottom:5px}.cart-freight .freight-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.cart-freight .freight-options span{min-height:38px;padding:7px 5px;border-radius:9px;font-size:.77rem}.cart-summary{border-top:0}
+@media(max-width:1100px){.product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:960px){.shop-layout{grid-template-columns:1fr;margin-top:20px}.product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.cart{margin-top:0}}
+@media(max-width:720px){.product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.shop-layout .product-card{min-height:155px;padding:14px}.shop-layout .product-card h3{font-size:.9rem}.shop-layout .price-row{display:grid}.shop-layout .add-cart{width:100%}}
+@media(max-width:430px){.product-grid{grid-template-columns:1fr}.shop-layout .product-card{min-height:140px}}
+
