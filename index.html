@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=7">
+  <link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
   <header class="topbar">
@@ -78,10 +78,18 @@
     <a id="whatsapp-order" class="whatsapp-order" href="#" target="_blank" rel="noopener">Enviar pedido pelo WhatsApp</a>
   </dialog>
 
+  <dialog id="photo-dialog" class="photo-dialog" aria-labelledby="photo-title">
+    <div class="photo-header">
+      <h2 id="photo-title">Foto do produto</h2>
+      <button id="close-photo" class="close-photo" type="button" aria-label="Fechar foto">×</button>
+    </div>
+    <div class="photo-stage"><img id="photo-image" src="" alt=""></div>
+  </dialog>
+
   <footer>
     <p>AKIRE · Atendimento via WhatsApp</p>
   </footer>
-  <script src="app.js?v=7" defer></script>
+  <script src="app.js?v=8" defer></script>
 </body>
 </html>
 
