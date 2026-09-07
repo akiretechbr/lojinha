@@ -1,24 +1,24 @@
 {
-  "updatedAt": "2026-09-07T14:57:59.711320-03:00",
+  "updatedAt": "2026-09-07T16:06:02.186610-03:00",
   "source": "MULTIPLAS",
   "products": [
     {
       "product": "BAT ALCALINA 9V TOSHIBA 1UN",
       "productType": "9V",
       "localSale": 17.82,
-      "marketplaceSale": 22.0
+      "marketplaceSale": 22
     },
     {
       "product": "BAT ALCALINA 9V PANASONIC 1UN",
       "productType": "9V",
       "localSale": 17.82,
-      "marketplaceSale": 26.0
+      "marketplaceSale": 26
     },
     {
       "product": "PILHA MOEDA CR2032 TOSHIBA 5UN",
       "productType": "PILHA MOEDA",
       "localSale": 25.04,
-      "marketplaceSale": 30.0
+      "marketplaceSale": 30
     },
     {
       "product": "Pilha Botão LR44 C/4 Duracell",
@@ -33,7 +33,7 @@
       "marketplaceSale": 17.5
     },
     {
-      "product": "Pilha Alcalina 1,5V AAA C/2",
+      "product": "Pilha Alcalina Panasonic 1,5V AAA C/2",
       "productType": "AAA",
       "localSale": 8.69,
       "marketplaceSale": 25.9
