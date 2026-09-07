@@ -1,5 +1,5 @@
 const productsNode = document.querySelector('#products');
-const countNode = document.querySelector('#product-count');
+const filterNode = document.querySelector('#product-filters');
 const errorNode = document.querySelector('#error');
 const searchNode = document.querySelector('#product-search');
 const cartItemsNode = document.querySelector('#cart-items');
@@ -31,6 +31,7 @@ let currentPhotoIndex = 0;
 let photoTouchStartX = 0;
 const money = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
 let products = [];
+let selectedProductType = 'TODOS';
 const cart = new Map();
 
 function selectedFreight() {
@@ -45,10 +46,10 @@ function escapeHtml(value) {
 
 function renderProducts() {
   const query = searchNode.value.trim().toLocaleLowerCase('pt-BR');
-  const visible = products.filter(item => item.product.toLocaleLowerCase('pt-BR').includes(query));
-  countNode.textContent = query
-    ? `${visible.length} ${visible.length === 1 ? 'produto encontrado' : 'produtos encontrados'}`
-    : `${visible.length} ${visible.length === 1 ? 'produto' : 'produtos'}`;
+  const visible = products.filter(item =>
+    item.product.toLocaleLowerCase('pt-BR').includes(query) &&
+    (selectedProductType === 'TODOS' || item.productType === selectedProductType)
+  );
   productsNode.innerHTML = visible.map((item, index) => `<article class="product-card">
     <span class="product-index">${String(index + 1).padStart(2, '0')}</span>
     <h3>${escapeHtml(item.product)}</h3>
@@ -60,6 +61,13 @@ function renderProducts() {
       </div>
     </div>
   </article>`).join('') || '<p class="error">Nenhum produto encontrado. Tente outro nome.</p>';
+}
+
+function renderProductFilters() {
+  const types = [...new Set(products.map(item => item.productType).filter(Boolean))];
+  filterNode.innerHTML = ['TODOS', ...types].map(type =>
+    `<button type="button" data-product-type="${escapeHtml(type)}" class="${type === selectedProductType ? 'active' : ''}">${type === 'TODOS' ? 'Todos' : escapeHtml(type)}</button>`
+  ).join('');
 }
 
 function renderCart() {
@@ -187,6 +195,13 @@ photoStageNode.addEventListener('touchend', event => {
 photoDialog.addEventListener('click', event => { if (event.target === photoDialog) photoDialog.close(); });
 freightInputs.forEach(input => input.addEventListener('change', renderCart));
 searchNode.addEventListener('input', renderProducts);
+filterNode.addEventListener('click', event => {
+  const button = event.target.closest('[data-product-type]');
+  if (!button) return;
+  selectedProductType = button.dataset.productType;
+  renderProductFilters();
+  renderProducts();
+});
 
 Promise.all([
   fetch('data/produtos.json', { cache: 'no-store' }).then(response => {
@@ -201,8 +216,9 @@ Promise.all([
       item.images || (item.image ? [item.image] : [])
     ]));
     products = (data.products || []).map(item => ({ ...item, images: photoByProduct.get(item.product.toLocaleLowerCase('pt-BR')) || [] }));
+    renderProductFilters();
     renderProducts();
     renderCart();
   })
-  .catch(() => { errorNode.hidden = false; countNode.textContent = ''; });
+  .catch(() => { errorNode.hidden = false; });
 
