@@ -116,8 +116,7 @@ function openCheckout() {
     checkoutSavingsNode.innerHTML = `Parabéns! Nesta compra você economizou <strong>${savingsPercent.toLocaleString('pt-BR', { maximumFractionDigits: 1 })}%</strong> comparado ao valor no e-commerce.`;
   }
   const lines = items.map(item => `• ${item.quantity}x ${item.product} — ${money.format(item.localSale * item.quantity)}`);
-  const economyLine = ecommerceTotal > 0 && savings > 0 ? `Economia em relação ao e-commerce: ${savingsPercent.toLocaleString('pt-BR', { maximumFractionDigits: 1 })}%` : '';
-  const message = ['Olá! Segue o resumo do pedido:', '', ...lines, '', `Subtotal: ${money.format(subtotal)}`, `Frete: ${money.format(freight)}`, `Total: ${money.format(total)}`, economyLine].filter(Boolean).join('\n');
+  const message = ['Olá! Segue o resumo do pedido:', '', ...lines, '', `Subtotal: ${money.format(subtotal)}`, `Frete: ${money.format(freight)}`, `Total: ${money.format(total)}`].filter(Boolean).join('\n');
   whatsappOrderNode.href = `https://wa.me/5541998474731?text=${encodeURIComponent(message)}`;
   checkoutDialog.showModal();
 }
