@@ -208,10 +208,11 @@ Promise.all([
     return response.json();
   }),
   fetch(`data/fotos.json?v=${Date.now()}`, { cache: 'no-store' }).then(response => response.ok ? response.json() : { photos: [] }),
-  fetch(`data/fotos-novos.json?v=${Date.now()}`, { cache: 'no-store' }).then(response => response.ok ? response.json() : { photos: [] })
+  fetch(`data/fotos-novos.json?v=${Date.now()}`, { cache: 'no-store' }).then(response => response.ok ? response.json() : { photos: [] }),
+  fetch(`data/fotos-novos-2.json?v=${Date.now()}`, { cache: 'no-store' }).then(response => response.ok ? response.json() : { photos: [] })
 ])
-  .then(([data, photoData, newPhotoData]) => {
-    const allPhotos = [...(photoData.photos || []), ...(newPhotoData.photos || [])];
+  .then(([data, photoData, newPhotoData, newPhotoData2]) => {
+    const allPhotos = [...(photoData.photos || []), ...(newPhotoData.photos || []), ...(newPhotoData2.photos || [])];
     const photoByProduct = new Map(allPhotos.map(item => [
       item.product.toLocaleLowerCase('pt-BR'),
       item.images || (item.image ? [item.image] : [])
