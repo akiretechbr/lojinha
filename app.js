@@ -50,14 +50,12 @@ function renderProducts() {
     item.product.toLocaleLowerCase('pt-BR').includes(query) &&
     (selectedProductType === 'TODOS' || item.productType === selectedProductType)
   );
-  productsNode.innerHTML = visible.map((item, index) => `<article class="product-card">
-    <span class="product-index">${String(index + 1).padStart(2, '0')}</span>
+  productsNode.innerHTML = visible.map(item => `<article class="product-card">
     <h3>${escapeHtml(item.product)}</h3>
     ${item.thumbnail ? `<button class="product-thumbnail" type="button" data-photo-product="${escapeHtml(item.product)}" aria-label="Ver fotos de ${escapeHtml(item.product)}"><img src="${item.thumbnail}" alt="" loading="lazy"></button>` : ''}
     <div class="price-row">
       <div><span class="price-label">Valor unitário</span><span class="base-price">${money.format(item.localSale)}</span></div>
       <div class="product-actions">
-        ${item.images?.length ? `<button class="photo-button" type="button" data-photo-product="${escapeHtml(item.product)}">Foto${item.images.length > 1 ? ` (${item.images.length})` : ''}</button>` : ''}
         <button class="add-cart" type="button" data-product="${escapeHtml(item.product)}" aria-label="Adicionar ${escapeHtml(item.product)} ao carrinho"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 1.9-1.4L21 8H7"></path><circle cx="10" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle></svg><span>Adicionar</span></button>
       </div>
     </div>
