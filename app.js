@@ -53,11 +53,12 @@ function renderProducts() {
   productsNode.innerHTML = visible.map((item, index) => `<article class="product-card">
     <span class="product-index">${String(index + 1).padStart(2, '0')}</span>
     <h3>${escapeHtml(item.product)}</h3>
+    ${item.thumbnail ? `<button class="product-thumbnail" type="button" data-photo-product="${escapeHtml(item.product)}" aria-label="Ver fotos de ${escapeHtml(item.product)}"><img src="${item.thumbnail}" alt="" loading="lazy"></button>` : ''}
     <div class="price-row">
       <div><span class="price-label">Valor unitário</span><span class="base-price">${money.format(item.localSale)}</span></div>
       <div class="product-actions">
         ${item.images?.length ? `<button class="photo-button" type="button" data-photo-product="${escapeHtml(item.product)}">Foto${item.images.length > 1 ? ` (${item.images.length})` : ''}</button>` : ''}
-        <button class="add-cart" type="button" data-product="${escapeHtml(item.product)}">Adicionar</button>
+        <button class="add-cart" type="button" data-product="${escapeHtml(item.product)}" aria-label="Adicionar ${escapeHtml(item.product)} ao carrinho"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 1.9-1.4L21 8H7"></path><circle cx="10" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle></svg><span>Adicionar</span></button>
       </div>
     </div>
   </article>`).join('') || '<p class="error">Nenhum produto encontrado. Tente outro nome.</p>';
@@ -209,15 +210,21 @@ Promise.all([
   }),
   fetch(`data/fotos.json?v=${Date.now()}`, { cache: 'no-store' }).then(response => response.ok ? response.json() : { photos: [] }),
   fetch(`data/fotos-novos.json?v=${Date.now()}`, { cache: 'no-store' }).then(response => response.ok ? response.json() : { photos: [] }),
-  fetch(`data/fotos-novos-2.json?v=${Date.now()}`, { cache: 'no-store' }).then(response => response.ok ? response.json() : { photos: [] })
+  fetch(`data/fotos-novos-2.json?v=${Date.now()}`, { cache: 'no-store' }).then(response => response.ok ? response.json() : { photos: [] }),
+  fetch(`data/miniaturas.json?v=${Date.now()}`, { cache: 'no-store' }).then(response => response.ok ? response.json() : { thumbnails: [] })
 ])
-  .then(([data, photoData, newPhotoData, newPhotoData2]) => {
+  .then(([data, photoData, newPhotoData, newPhotoData2, thumbnailData]) => {
     const allPhotos = [...(photoData.photos || []), ...(newPhotoData.photos || []), ...(newPhotoData2.photos || [])];
     const photoByProduct = new Map(allPhotos.map(item => [
       item.product.toLocaleLowerCase('pt-BR'),
       item.images || (item.image ? [item.image] : [])
     ]));
-    products = (data.products || []).map(item => ({ ...item, images: photoByProduct.get(item.product.toLocaleLowerCase('pt-BR')) || [] }));
+    const thumbnailByProduct = new Map((thumbnailData.thumbnails || []).map(item => [item.product.toLocaleLowerCase('pt-BR'), item.image]));
+    products = (data.products || []).map(item => ({
+      ...item,
+      images: photoByProduct.get(item.product.toLocaleLowerCase('pt-BR')) || [],
+      thumbnail: thumbnailByProduct.get(item.product.toLocaleLowerCase('pt-BR')) || ''
+    }));
     renderProductFilters();
     renderProducts();
     renderCart();
