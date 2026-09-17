@@ -4,6 +4,7 @@ const errorNode = document.querySelector('#error');
 const searchNode = document.querySelector('#product-search');
 const cartItemsNode = document.querySelector('#cart-items');
 const cartBadgeNode = document.querySelector('#cart-badge');
+const headerCartBadgeNode = document.querySelector('#header-cart-badge');
 const subtotalNode = document.querySelector('#cart-subtotal');
 const cartFreightNode = document.querySelector('#cart-freight');
 const totalNode = document.querySelector('#cart-total');
@@ -75,6 +76,8 @@ function renderCart() {
   const subtotal = items.reduce((sum, item) => sum + item.localSale * item.quantity, 0);
   const freight = items.length ? selectedFreight() : 0;
   cartBadgeNode.textContent = quantity;
+  headerCartBadgeNode.textContent = quantity;
+  headerCartBadgeNode.classList.toggle('has-items', quantity > 0);
   subtotalNode.textContent = money.format(subtotal);
   cartFreightNode.textContent = money.format(freight);
   totalNode.textContent = money.format(subtotal + freight);
