@@ -9,13 +9,17 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=14">
+  <link rel="stylesheet" href="style.css?v=15">
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="#inicio" aria-label="Akire — início">
       <img src="https://akiretechbr.github.io/loja/assets/logo.webp" alt="Logo Akire">
       <span>LOJINHA</span>
+    </a>
+    <a class="header-cart" href="#carrinho" aria-label="Ir para o carrinho">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h2l2.2 10.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 1.9-1.4L21 8H7"></path><circle cx="10" cy="20" r="1"></circle><circle cx="18" cy="20" r="1"></circle></svg>
+      <span id="header-cart-badge" class="header-cart-badge">0</span>
     </a>
   </header>
 
@@ -34,7 +38,7 @@
       <div id="products" class="product-grid" aria-live="polite"></div>
       <p id="error" class="error" hidden>Não foi possível carregar os produtos. Tente novamente mais tarde.</p>
     </section>
-    <aside class="cart" aria-labelledby="cart-title">
+    <aside id="carrinho" class="cart" aria-labelledby="cart-title">
       <div class="cart-heading">
         <div><p class="kicker">SUA LISTA</p><h2 id="cart-title">Carrinho</h2></div>
         <span id="cart-badge" class="cart-badge">0</span>
@@ -91,7 +95,7 @@
   <footer>
     <p>AKIRE · Atendimento via WhatsApp</p>
   </footer>
-  <script src="app.js?v=12" defer></script>
+  <script src="app.js?v=13" defer></script>
 </body>
 </html>
 
